@@ -1,3 +1,73 @@
 spring:
   application:
     name: quickbite
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/quickbite}
+    username: ${DB_USERNAME:ryu}
+    password: ${DB_PASSWORD:1234}
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
+        format_sql: false
+  flyway:
+    enabled: true
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:}
+      timeout: 2s
+
+server:
+  port: ${SERVER_PORT:8080}
+  shutdown: graceful
+
+quickbite:
+  jwt:
+    issuer: ${JWT_ISSUER:quickbite-local}
+    secret: ${JWT_SECRET:change-me-change-me-change-me-change-me}
+    access-token-ttl: ${JWT_ACCESS_TOKEN_TTL:PT2H}
+  queue:
+    orders-key: ${ORDER_QUEUE_KEY:quickbite:orders:created}
+    consumer-delay-ms: ${ORDER_QUEUE_CONSUMER_DELAY_MS:1500}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      probes:
+        enabled: true
+  observations:
+    annotations:
+      enabled: true
+
+logging:
+  pattern:
+    level: "%5p [trace=%X{traceId:-na}]"
+  level:
+    com.codereferee.quickbite: ${APP_LOG_LEVEL:INFO}
+
+---
+spring:
+  config:
+    activate:
+      on-profile: test
+  datasource:
+    url: jdbc:h2:mem:quickbite;MODE=PostgreSQL;DB_CLOSE_DELAY=-1;DATABASE_TO_LOWER=TRUE
+    username: sa
+    password:
+  data:
+    redis:
+      host: localhost
+      port: 6379
+  jpa:
+    hibernate:
+      ddl-auto: validate
