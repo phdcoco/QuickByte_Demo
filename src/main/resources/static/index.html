@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>QuickBite Ops Console</title>
+    <link rel="stylesheet" href="/assets/styles.css">
+</head>
+<body>
+<header class="topbar">
+    <div>
+        <p class="eyebrow">QuickBite</p>
+        <h1>Delivery Control Desk</h1>
+    </div>
+    <div class="session">
+        <span id="sessionLabel">로그인 전</span>
+        <button id="logoutButton" class="ghost" type="button">로그아웃</button>
+    </div>
+</header>
+
+<main class="layout">
+    <section class="panel auth-panel">
+        <div class="panel-heading">
+            <h2>계정</h2>
+        </div>
+        <div class="tabs" role="tablist">
+            <button class="tab active" data-auth-mode="customer">고객</button>
+            <button class="tab" data-auth-mode="admin">관리자</button>
+        </div>
+        <form id="authForm" class="stack">
+            <label>
+                이메일
+                <input id="email" type="email" autocomplete="email" value="ryu@example.com" required>
+            </label>
+            <label id="displayNameWrap">
+                표시 이름
+                <input id="displayName" type="text" value="Ryu" maxlength="120">
+            </label>
+            <label>
+                비밀번호
+                <input id="password" type="password" value="delivery-demo-123" minlength="10" required>
+            </label>
+            <div class="button-row">
+                <button id="signupButton" type="submit">가입</button>
+                <button id="loginButton" class="secondary" type="button">로그인</button>
+            </div>
+        </form>
+    </section>
+
+    <section class="panel">
+        <div class="panel-heading">
+            <h2>식당/메뉴</h2>
+        </div>
+        <div class="button-row">
+            <button id="refreshRestaurants" class="secondary" type="button">목록 새로고침</button>
+            <button id="seedRestaurant" type="button">샘플 식당 생성</button>
+        </div>
+        <div id="restaurants" class="restaurant-list"></div>
+    </section>
+
+    <section class="panel order-panel">
+        <div class="panel-heading">
+            <h2>주문</h2>
+        </div>
+        <form id="orderForm" class="stack">
+            <label>
+                식당
+                <select id="restaurantSelect" required></select>
+            </label>
+            <label>
+                메뉴
+                <select id="menuSelect" required></select>
+            </label>
+            <label>
+                수량
+                <input id="quantity" type="number" min="1" value="1" required>
+            </label>
+            <label>
+                배달 주소
+                <input id="deliveryAddress" type="text" value="21 Teheran-ro, Gangnam-gu" required>
+            </label>
+            <label>
+                요청사항
+                <input id="customerNote" type="text" value="도착하면 전화 주세요" maxlength="300">
+            </label>
+            <button type="submit">주문 생성</button>
+        </form>
+        <div id="orderResult" class="result-block muted">아직 주문이 없습니다.</div>
+    </section>
+
+    <section class="panel">
+        <div class="panel-heading">
+            <h2>운영 이벤트</h2>
+        </div>
+        <div class="button-row">
+            <button id="authorizePayment" type="button">결제 승인</button>
+            <button id="openEvents" class="secondary" type="button">상태 스트림 연결</button>
+            <button id="loadDelivery" class="secondary" type="button">배달 추적 조회</button>
+        </div>
+        <pre id="eventLog" class="event-log">이벤트 로그 대기 중...</pre>
+    </section>
+</main>
+
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+<script src="/assets/app.js"></script>
+</body>
+</html>

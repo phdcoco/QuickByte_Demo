@@ -45,6 +45,8 @@ docker compose up --build
 
 The API listens on `http://localhost:8080`. Local Swagger UI is exposed at `/swagger-ui/index.html`, health at `/actuator/health`, and Prometheus metrics at `/actuator/prometheus`.
 
+A basic browser console is served from `/`. It supports customer signup/login, admin sample restaurant creation, restaurant browsing, order creation, payment authorization, SSE order events, and delivery tracking calls against the same API origin.
+
 Compose bootstraps a local admin account when `BOOTSTRAP_ADMIN_EMAIL` and `BOOTSTRAP_ADMIN_PASSWORD` are set. Remove the password variable after first use in any shared environment.
 
 For app-only development against local PostgreSQL and Redis:
@@ -121,6 +123,8 @@ Track status changes through SSE:
 curl -N http://localhost:8080/api/orders/1/events \
   -H "Authorization: Bearer $CUSTOMER_TOKEN"
 ```
+
+The browser demo uses `EventSource`, which cannot attach custom `Authorization` headers. For that one UI path the backend also accepts `?access_token=...`; this is convenient for local demos but should be replaced with a cookie-backed session, short-lived one-time stream token, or WebSocket auth handshake before production.
 
 Read delivery tracking after the Redis consumer has accepted the paid order:
 
